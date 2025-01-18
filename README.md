@@ -1,2 +1,3 @@
 # benzene
-building a databse
+Hello ! 
+This project revolves around building my own database BENZENE 
