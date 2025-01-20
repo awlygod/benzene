@@ -13,9 +13,10 @@
     TOKEN_INTO,
     TOKEN_STRING, // This would be for the name of the db and stuff
     TOKEN_VALUE,
-    TOKEN_INT,
+    TOKEN_INTEGER,
     TOKEN_LEFT_PAREN,
-    TOKEN_RIGHT_PAREN
+    TOKEN_RIGHT_PAREN,
+    TOKEN_COMMA
 
  } TOKEN_SET;
 
@@ -32,9 +33,10 @@
   case TOKEN_INTO          : return "TOKEN_INTO";
   case TOKEN_STRING        : return "TOKEN_STRING";
   case TOKEN_VALUE         : return "TOKEN_VALUE";
-  case TOKEN_INT           : return "TOKEN_INT";
+  case TOKEN_INTEGER       : return "TOKEN_INTEGER";
   case TOKEN_LEFT_PAREN    : return "TOKEN_LEFT_PAREN";
-  case TOKEN_RIGHT_PAREN   : return "TOKEN_RIGHT_PAREN";    
+  case TOKEN_RIGHT_PAREN   : return "TOKEN_RIGHT_PAREN";   
+  case TOKEN_COMMA         : return "TOKEN_COMMA";
   }
     return " [!] ERROR: UNIDENTIFIED TOKEN : " + REQUIRED_TOKEN;
  }
@@ -87,9 +89,17 @@ class Lexer {
   return newToken;
  }
 
- TOKEN *tokenizeINTEGER() {
+ TOKEN *tokenizeINTEGER() { 
   TOKEN * newToken = new TOKEN;
   std::string temporaryBuffer = "";
+  while (isdigit(current)){
+    temporaryBuffer.push_back(current);
+    advance();
+  }
+  newToken->TOKEN_TYPE = TOKEN_INTEGER;
+  newToken->VALUE = temporaryBuffer;
+
+  return newToken;
  }
  void displayAllToken(){
   // Displays all tokens ijn TOKEN_LIST with their type and value for debugging purposes
@@ -123,7 +133,9 @@ class Lexer {
       else if(isdigit(current)){
         TOKEN_LIST.push_back(tokenizeINTEGER());
       }
+      
     } 
+
     displayAllToken();
 
  }
