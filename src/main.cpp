@@ -78,7 +78,7 @@ class Lexer {
 
   TOKEN * newToken = new TOKEN;
   std::string temporaryBuffer = ""; // Collects the characters into temporaryBuffer until a non-alphabetic character is found
-  while (isalpha(current))
+  while (isalpha(current) || current == '_')
   {
     temporaryBuffer.push_back(current); // Pushing this into buffer 
     advance();
@@ -112,6 +112,15 @@ class Lexer {
 
   }
  }
+ TOKEN * tokenizeSPECIAL (TOKEN_SET NEW_TOKEN_TYPE){
+  TOKEN * newToken = new TOKEN;
+  newToken->TOKEN_TYPE = NEW_TOKEN_TYPE;
+  newToken->VALUE = current;
+
+  advance();
+  return newToken;
+
+ }
  public: 
  Lexer() {
 
@@ -126,12 +135,31 @@ class Lexer {
     
     while(current !='\0') {
       skipWhiteSpaces();
-      if (isalpha(current))
+      if (isalpha(current || current == '_'))
       {
         TOKEN_LIST.push_back(tokenizeALPHA());
       }
       else if(isdigit(current)){
         TOKEN_LIST.push_back(tokenizeINTEGER());
+      }
+      switch (current)
+      {
+          case '(':
+          {
+            TOKEN_LIST.push_back(tokenizeSPECIAL(TOKEN_LEFT_PAREN));
+          }
+          case ')':
+          {
+            TOKEN_LIST.push_back(tokenizeSPECIAL(TOKEN_RIGHT_PAREN));
+          }
+          case ',':
+          {
+            TOKEN_LIST.push_back(tokenizeSPECIAL(TOKEN_COMMA));
+          }
+          default:
+          std::cout << "[!] LEXER ERROR : UNIDENTIFIED CHARACTER: "<< current << std::endl;
+          exit(0);
+          
       }
       
     } 
