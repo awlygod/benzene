@@ -1,11 +1,11 @@
 //#include "lexer.h"
 
-// This are the header files
+// These are the header files
 #include<iostream>
 #include<stdio.h>
 #include<String>
 #include<vector>
-
+#include<unordered_map>
 // Here basically we r defining the token types like various types of tokens the lexer can identify
  typedef enum
 {
@@ -13,6 +13,9 @@
     TOKEN_INTO,
     TOKEN_STRING, // This would be for the name of the db and stuff
     TOKEN_VALUE,
+    TOKEN_DELETE,
+    TOKEN_SEARCH,
+    TOKEN_IN,
     TOKEN_INTEGER,
     TOKEN_LEFT_PAREN,
     TOKEN_RIGHT_PAREN,
@@ -33,6 +36,9 @@
   case TOKEN_INTO          : return "TOKEN_INTO";
   case TOKEN_STRING        : return "TOKEN_STRING";
   case TOKEN_VALUE         : return "TOKEN_VALUE";
+  case TOKEN_DELETE        : return "TOKEN_DELETE";
+  case TOKEN_IN            : return "TOKEN_IN";
+  case TOKEN_SEARCH        : return "TOKEN_SEARCH";
   case TOKEN_INTEGER       : return "TOKEN_INTEGER";
   case TOKEN_LEFT_PAREN    : return "TOKEN_LEFT_PAREN";
   case TOKEN_RIGHT_PAREN   : return "TOKEN_RIGHT_PAREN";   
@@ -40,7 +46,21 @@
   }
     return " [!] ERROR: UNIDENTIFIED TOKEN : " + REQUIRED_TOKEN;
  }
+std::unordered_map< std::string, TOKEN_SET> KEYWORD_MAP = {
+  {"insert",      TOKEN_INSERT},
+  {"into",        TOKEN_INTO},
+  {"string",      TOKEN_STRING},
+  {"value",       TOKEN_VALUE },
+  {"delete",      TOKEN_DELETE},
+  {"in",          TOKEN_IN},
+  {"search",      TOKEN_SEARCH},
+  {"integer",     TOKEN_INTEGER},
+  {"left_paren",  TOKEN_LEFT_PAREN},
+  {"right_paren", TOKEN_RIGHT_PAREN},
 
+  
+
+};
 // Lexer class basically processes the input string, identifies tokens, and stores them in a list.
 class Lexer {
 
@@ -102,7 +122,7 @@ class Lexer {
   return newToken;
  }
  void displayAllToken(){
-  // Displays all tokens ijn TOKEN_LIST with their type and value for debugging purposes
+  // Displays all tokens in TOKEN_LIST with their type and value for debugging purposes
 
   int counter = 0;
   for(TOKEN * CURRENT_TOKEN : TOKEN_LIST) 
